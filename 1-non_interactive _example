@@ -1,0 +1,8 @@
+# In this script, the shell reads the commands from the file
+# and executes them one after another,
+# without waiting for user input. The output of the script would be:
+
+
+#!/bin/bash
+echo "Hello, World!"
+ls
