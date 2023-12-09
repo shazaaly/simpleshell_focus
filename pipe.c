@@ -1,26 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
 #include <sys/wait.h>
 
-/*
-
-*/
-
 void execute_command(char *command) {
-    char *args[10];  // Assuming a maximum of 10 arguments
-    char *token = strtok(command, " ");
-    int i = 0;
-    while (token != NULL && i < 10) {
-        args[i++] = token;
-        token = strtok(NULL, " ");
-    }
-    args[i] = NULL;  // Set the last element to NULL for execvp
-
-    execvp(args[0], args);
-    perror("execvp");
-    exit(EXIT_FAILURE);
+    // Implement your logic to execute a command here
+    // For simplicity, let's print the command for demonstration
+    printf("Executing: %s\n", command);
+    system(command);
 }
 
 void handle_pipe(char *input) {
@@ -49,11 +38,30 @@ void handle_pipe(char *input) {
         // Child: execute the first command and write to pipe
         close(pipefd[0]);  // Close unused read end
         dup2(pipefd[1], STDOUT_FILENO);  // Redirect stdout to pipe
+        close(pipefd[1]);  // Close the write end of the pipe in the child
         execute_command(command1);
+        exit(EXIT_SUCCESS);
     } else {
         // Parent: execute the second command and read from pipe
         close(pipefd[1]);  // Close unused write end
         dup2(pipefd[0], STDIN_FILENO);  // Redirect stdin from pipe
+        close(pipefd[0]);  // Close the read end of the pipe in the parent
         execute_command(command2);
+        wait(NULL);  // Wait for the child process to complete
     }
+}
+
+int main() {
+    char input[256];  // Adjust the buffer size as needed
+    printf("Enter command with pipe (e.g., command1 | command2): ");
+    fgets(input, sizeof(input), stdin);
+
+    // Remove newline character from input
+    if (input[strlen(input) - 1] == '\n') {
+        input[strlen(input) - 1] = '\0';
+    }
+
+    handle_pipe(input);
+
+    return 0;
 }
