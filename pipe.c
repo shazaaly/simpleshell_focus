@@ -9,7 +9,7 @@ void execute_command(char *command) {
     // Implement your logic to execute a command here
     // For simplicity, let's print the command for demonstration
     printf("Executing: %s\n", command);
-    system(command);
+    system(command); //The system() function is a library function that makes a system call to execute a shell command passed to it as a string. It's defined in stdlib.h in C.
 }
 
 void handle_pipe(char *input) {
