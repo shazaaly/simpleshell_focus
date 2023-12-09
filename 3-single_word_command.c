@@ -1,3 +1,12 @@
+
+/*
+1-prompt user
+2- check if no space => single word command
+3- remove new line char from command enterred
+4- excute
+
+
+*/
 #include <stdio.h>   /*For input/output functions*/
 #include <stdlib.h>  /* For general purpose functions */
 #include <string.h>  /* For string handling functions */
@@ -7,9 +16,12 @@ int main(void)
 {
     char command[100]; /* Array to store the command entered by the user */
 
-    char *argv[2]; /*This declares an array of pointers to character strings. It will be used to pass the command and its arguments to the execve function. */
+    char *argv[2]; /*This declares an array of pointers to character strings.
+    It will be used to pass the command and its arguments to the execve function. */
 
-    char *envp[] = { NULL }; /*declares an array of pointers to environment variables. In this case, it's set to NULL, meaning no environment variables are passed to the execve function.*/
+    char *envp[] = { NULL }; /*declares an array of pointers to environment variables.
+    In this case, it's set to NULL,
+    meaning no environment variables are passed to the execve function.*/
 
     int status; /*To store the status returned by execve */
 
@@ -28,6 +40,7 @@ int main(void)
 
             // Execute the command
             status = execve(command, argv, envp);
+            // status = execvp(argv[0], argv);
             if (status == -1) // If execve returns, there was an error
             {
                 perror(command); // print a descriptive error message to the standard error stream.
